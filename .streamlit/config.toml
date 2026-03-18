@@ -1,0 +1,14 @@
+[theme]
+primaryColor="#ebab34"
+backgroundColor="#0D0D0D"
+secondaryBackgroundColor="rgba(20,20,20,0.85)"
+textColor="#FFFFFF"
+font="sans serif"
+
+[server]
+port = 8501
+enableCORS = false
+enableXsrfProtection = true
+
+[browser]
+gatherUsageStats = false

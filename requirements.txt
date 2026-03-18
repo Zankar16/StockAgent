@@ -1,0 +1,10 @@
+streamlit
+streamlit_option_menu
+pandas
+numpy
+plotly
+yfinance
+scikit-learn
+xgboost
+statsmodels
+tensorflow

@@ -14,6 +14,14 @@ from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import LSTM, Dense, Conv1D, MaxPooling1D, Flatten
 from tensorflow.keras.callbacks import EarlyStopping
 
+# Page Configuration
+st.set_page_config(
+    page_title="TrendPredictor | AI-Powered Crypto Insights",
+    page_icon="📈",
+    layout="wide",
+    initial_sidebar_state="expanded"
+)
+
 # -----------------------------
 # FETCH CRYPTO DATA
 # -----------------------------
@@ -270,97 +278,126 @@ if "logged_in" not in st.session_state:
 if "username" not in st.session_state:
     st.session_state.username = ""
 
-st.set_page_config(
-    page_title="Crypto Dashboard",
-    layout="wide",
-    initial_sidebar_state="expanded"
-)
-
+# Colors and Styling
 BG_COLOR = "#0D0D0D"
-CARD_COLOR = "rgba(20,20,20,0.85)"
-TEXT_COLOR = "white"
+ACCENT_COLOR = "hsl(43, 80%, 47%)"  # Golden/Neon Yellow
+CARD_COLOR = "rgba(30, 30, 30, 0.6)"
+TEXT_COLOR = "#E0E0E0"
 NEON = "#ebab34"
 
 st.markdown(f"""
 <style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap');
 
-body {{
+html, body, [class*="css"] {{
+    font-family: 'Inter', sans-serif;
     background-color: {BG_COLOR};
     color: {TEXT_COLOR};
 }}
 
-.sidebar .sidebar-content {{
-    background-color: {BG_COLOR};
+.stApp {{
+    background: radial-gradient(circle at 50% 50%, #1a1a1a 0%, #0d0d0d 100%);
 }}
 
-.card {{
-    background-color: {CARD_COLOR};
-    padding: 20px;
-    border-radius: 18px;
-}}
-
-.big-card {{
-    background-color: {CARD_COLOR};
-    padding: 30px;
+/* Glassmorphism Cards */
+.card, .metric-card, .about-card, .big-card {{
+    background: {CARD_COLOR};
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
     border-radius: 20px;
+    padding: 24px;
+    margin-bottom: 20px;
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
 }}
 
-.metric-card {{
-    background-color: {CARD_COLOR};
-    border-radius: 15px;
-    padding: 20px;
-    margin-bottom: 15px;
-    text-align:center;
+.card:hover, .metric-card:hover {{
+    transform: translateY(-5px);
+    box-shadow: 0 12px 48px 0 rgba(0, 0, 0, 0.5);
+    border-color: {NEON};
+}}
+
+/* Metrics */
+.metric-card h4 {{
+    font-size: 0.9rem;
+    color: rgba(255,255,255,0.6);
+    margin-bottom: 8px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}}
+
+.metric-card h2 {{
+    font-size: 1.8rem;
+    font-weight: 700;
+    margin: 5px 0;
 }}
 
 .neon-button {{
-    background-color: transparent;
-    border: 2px solid {NEON};
-    padding: 12px 25px;
-    font-size: 18px;
-    border-radius: 10px;
-    color: {NEON};
-    transition: 0.3s;
+    background: linear-gradient(135deg, {NEON} 0%, #d49a2a 100%);
+    border: none;
+    padding: 12px 30px;
+    font-weight: 600;
+    border-radius: 12px;
+    color: black;
     cursor: pointer;
+    box-shadow: 0 4px 15px rgba(235, 171, 52, 0.3);
+    transition: 0.3s;
 }}
 
 .neon-button:hover {{
-    background-color: {NEON};
-    color: black;
     transform: scale(1.05);
+    box-shadow: 0 6px 25px rgba(235, 171, 52, 0.5);
 }}
 
-.about-card {{
-    background-color: {CARD_COLOR};
-    padding: 25px;
-    border-radius: 18px;
+/* Sidebar Styling */
+[data-testid="stSidebar"] {{
+    background-color: rgba(13, 13, 13, 0.95);
+    border-right: 1px solid rgba(255,255,255,0.05);
 }}
 
-h1, h2, h3, h4, p {{
-    color: {TEXT_COLOR};
+h1, h2, h3 {{
+    font-weight: 700;
+    background: linear-gradient(to right, #ffffff, {NEON});
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
 }}
 
 </style>
 """, unsafe_allow_html=True)
 if not st.session_state.logged_in:
-    st.markdown(f"<h1 style='color:{NEON}; text-align:center;'>Login</h1>", unsafe_allow_html=True)
+    # Login form centered with glassmorphism
+    col1, col2, col3 = st.columns([1, 2, 1])
+    with col2:
+        st.markdown(f"""
+        <div class='card' style='text-align:center; margin-top: 50px;'>
+            <h1 style='font-size:3rem;'>Login</h1>
+            <p style='color:rgba(255,255,255,0.5);'>Welcome back to TrendPredictor</p>
+        </div>
+        """, unsafe_allow_html=True)
+        
+        user = st.text_input("Username", placeholder="Enter your username")
+        pwd = st.text_input("Password", type="password", placeholder="Enter your password")
+        
+        st.markdown("<br>", unsafe_allow_html=True)
+        login_button = st.button("Access Dashboard", use_container_width=True)
 
-    user = st.text_input("Username")
-    pwd = st.text_input("Password", type="password")
+        if login_button:
+            # Using st.secrets for production-ready credentials
+            # Fallback to hardcoded for local if secrets are missing
+            target_user = st.secrets.get("credentials", {}).get("username", "admin")
+            target_pwd = st.secrets.get("credentials", {}).get("password", "1234")
+            
+            if user == target_user and pwd == target_pwd:
+                st.session_state.logged_in = True
+                st.session_state.username = user
+                st.success("Authentication Successful! Redirecting...")
+                st.balloons()
+                st.rerun()
+            else:
+                st.error("Invalid credentials. Please try again.")
 
-    st.markdown("<br>", unsafe_allow_html=True)
-    login_button = st.button("Login")
-
-    if login_button:
-        if user == "admin" and pwd == "1234":
-            st.session_state.logged_in = True
-            st.session_state.username = user
-            st.success("Login Successful!")
-            st.rerun()
-        else:
-            st.error("Invalid username or password")
-
-    st.stop() 
+    st.stop()
 with st.sidebar:
 
     selected = option_menu(
