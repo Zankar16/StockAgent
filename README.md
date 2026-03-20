@@ -1,4 +1,4 @@
-# 📈 TrendPredictor: AI-Powered Crypto Insights
+# StockAgent: AI-Powered Crypto Insights
 
 TrendPredictor is a professional-grade cryptocurrency dashboard built with Streamlit. It leverages multiple machine learning models (LSTM, CNN-1D, Random Forest, XGBoost, ARIMA) to analyze and predict market trends.
 
