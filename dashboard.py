@@ -271,7 +271,6 @@ def ai_predict(symbol="BTC", days=365):
 
     return best_model, last_price, pred
 
-
 if "logged_in" not in st.session_state:
     st.session_state.logged_in = False
 
