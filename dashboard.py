@@ -252,7 +252,7 @@ def ai_predict(symbol="BTC", days=365):
     best_model = min(rmse_scores, key=rmse_scores.get)
 
     # Predict next value
-    last_price = float(series[-1])
+    last_price = float(series[-1][0])
 
     if best_model == "LSTM":
         seq = series[-30:].reshape(1, 30, 1)
